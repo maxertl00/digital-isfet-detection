@@ -10,3 +10,5 @@ output/
 .vscode/
 .idea/
 .DS_Store
+# Runtime-generated GUI layout state (per-machine, not for the repo)
+smartloc2_layout.json
