@@ -946,9 +946,10 @@ class SmartLoC2App:
         for spine in ax.spines.values():
             spine.set_edgecolor("#C4D0D6")
 
+        # Start fully neutral. The colour range is fixed via vmin/vmax, so we
+        # do NOT need to seed corner cells with min/max values (that produced
+        # two coloured "phantom" pixels before any measurement was running).
         data2d = np.zeros((GRID_SIDE, GRID_SIDE))
-        data2d[0][0] = val_max
-        data2d[0][1] = val_min
         image = ax.imshow(data2d, cmap="RdBu", interpolation="nearest",
                           vmin=val_min, vmax=val_max, aspect="auto")
         self.map_data_current = data2d
@@ -959,19 +960,16 @@ class SmartLoC2App:
         ax.grid(which="minor", color="#FFFFFF", linewidth=0.5, alpha=0.45)
         ax.tick_params(which="minor", length=0)
 
-        # Discreet pixel-index labels: only on the outer frame of the grid so
-        # the live colour of each cell stays fully readable. Hover shows the
-        # exact index + value for any cell (see _on_map_hover).
+        # Pixel-index label inside every cell. Kept small and semi-transparent
+        # so the live colour stays readable; the hover tooltip additionally
+        # shows index + value for the cell under the cursor.
         self.map_index_labels = []
         if annotate:
             for x in range(GRID_SIDE):
                 for y in range(GRID_SIDE):
-                    on_edge = x in (0, GRID_SIDE - 1) or y in (0, GRID_SIDE - 1)
-                    if not on_edge:
-                        continue
                     label = ax.text(x, y, f"{int(GRID_SIDE * x + y)}",
-                                    ha="center", va="center", fontsize=6.5,
-                                    color="#6B7780", alpha=0.8, zorder=3)
+                                    ha="center", va="center", fontsize=6,
+                                    color="#46535B", alpha=0.75, zorder=3)
                     self.map_index_labels.append(label)
 
         cbar = fig.colorbar(image, ax=ax, label=zlabel, fraction=0.046, pad=0.04)
