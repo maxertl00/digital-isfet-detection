@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+measurements/
+output/
+*.dataframe
+
+.vscode/
+.idea/
+.DS_Store
